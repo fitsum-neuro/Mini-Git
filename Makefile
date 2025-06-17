@@ -19,12 +19,11 @@ TARGET = minigit.exe
 # default rule: build the target
 all: $(TARGET)
 
-# how to build the target executable
+# rule to build the target executable
 $(TARGET): $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-# how to build object files using standard Unix commands
-# the 'bash' shell that your 'make' is using understands these.
+# rule to build object files using standard Unix commands
 $(ODIR)/%.o: $(SDIR)/%.cpp
 	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
