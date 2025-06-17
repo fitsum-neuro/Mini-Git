@@ -38,12 +38,45 @@ void init() {
     fs::create_directory(".minigit/objects");
     fs::create_directory(".minigit/commits");
 
-    // Create the HEAD file, which points to the current commit/branch
-    // Initially, it's empty because there are no commits.
+    // create the HEAD file, which points to the current commit/branch
+    // initially, it's empty because there are no commits.
     std::ofstream head_file(".minigit/HEAD");
     head_file.close();
 
-    // Create the index file, which acts as the staging area
+    // create the index file, which acts as the staging area
     std::ofstream index_file(".minigit/index");
     index_file.close();
+}
+
+
+void add(const std::string& filename) {
+    if (!fs::exists(".minigit")) {
+        std::cerr << "Error: Not a MiniGit repository. Run 'minigit init' first.\n";
+        return;
+    }
+
+    if (!fs::exists(filename)) {
+        std::cerr << "Error: File not found: " << filename << "\n";
+        return;
+    }
+
+    // calculate the hash of the file content
+    std::string hash = file_to_sha1(filename);
+    if (hash.empty()) {
+        std::cerr << "Error: Could not read file to calculate hash.\n";
+        return;
+    }
+
+    // the path for the new blob object
+    fs::path blob_path = fs::path(".minigit/objects") / hash;
+
+    // copy the file to the objects directory, naming it with its hash
+    fs::copy_file(filename, blob_path, fs::copy_options::overwrite_existing);
+
+    // add the file and its hash to the index 
+    std::ofstream index_file(".minigit/index", std::ios::app);
+    index_file << hash << " " << filename << "\n";
+    index_file.close();
+
+    std::cout << "Staged " << filename << "\n";
 }
