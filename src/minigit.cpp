@@ -1,3 +1,6 @@
+#include <chrono> //for timestamp
+#include <ctime> // for timestamp
+#include <map>   //to hold index data
 #include "sha1.hpp" // for hashing
 #include <sstream>  // for reading file into string
 #include <iomanip>  // for formatting hash output
