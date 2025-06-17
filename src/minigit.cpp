@@ -14,7 +14,7 @@ void init() {
         std::cout << "Initializing empty MiniGit repository.\n";
     }
 
-    // Create the main .minigit directory and its subdirectories
+    // creates the main .minigit directory and its subdirectories
     fs::create_directory(".minigit");
     fs::create_directory(".minigit/objects");
     fs::create_directory(".minigit/commits");
