@@ -13,7 +13,13 @@ int main(int argc, char* argv[]) {
 
     if (command == "init") {
         init();
-    } else {
+    } else if (command == "add") {
+        if (argc < 3) {
+            std::cerr << "Usage: minigit add <filename>\n";
+            return 1;
+        }
+        add(argv[2]);
+    }else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;
     }
