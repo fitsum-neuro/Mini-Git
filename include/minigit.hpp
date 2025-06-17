@@ -3,7 +3,7 @@
 
 #include <string>
 
-// Function declarations for MiniGit operations
+// function declarations for operations
 void init();
 void add(const std::string& filename);
 void commit(const std::string& message);

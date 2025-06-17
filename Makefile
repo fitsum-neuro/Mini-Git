@@ -1,23 +1,20 @@
-# Compiler to use
+# compiler to use
 CXX = g++
 
-# Compiler flags
-# -std=c++17 is for modern C++ features like <filesystem>
-# -Wall enables all warnings
-# -g adds debugging information
+# compiler flags
 CXXFLAGS = -std=c++17 -Wall -g
 
 # directories
 IDIR = include
 SDIR = src
-
-# object files will be put in an 'obj' directory
 ODIR = obj
+
+# object files
 _OBJ = main.o minigit.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-# executable name
-TARGET = minigit
+# executable name for the target (with .exe for Windows)
+TARGET = minigit.exe
 
 # default rule: build the target
 all: $(TARGET)
@@ -26,16 +23,17 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-# hule to build object files
+# how to build object files using standard Unix commands
+# the 'bash' shell that your 'make' is using understands these.
 $(ODIR)/%.o: $(SDIR)/%.cpp
-	@mkdir -p $(ODIR)
+	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 
-# how for main.o, which isn't in src/
+# rule for main.o
 $(ODIR)/main.o: main.cpp
-	@mkdir -p $(ODIR)
+	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 
-# hule to clean up build files
+# rule to clean up build files using standard Unix command 'rm -rf'
 clean:
 	rm -rf $(ODIR) $(TARGET)
