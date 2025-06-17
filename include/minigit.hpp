@@ -6,6 +6,6 @@
 // Function declarations for MiniGit operations
 void init();
 void add(const std::string& filename);
-
+void commit(const std::string& message);
 
 #endif // MINIGIT_HPP
