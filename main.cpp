@@ -19,7 +19,14 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         add(argv[2]);
-    }else {
+    }
+    else if (command == "commit") {
+        if (argc < 4 || std::string(argv[2]) != "-m") {
+            std::cerr << "Usage: minigit commit -m \"<message>\"\n";
+            return 1;
+        }
+        commit(argv[3]);
+    } else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;
     }

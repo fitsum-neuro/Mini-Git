@@ -83,3 +83,67 @@ void add(const std::string& filename) {
 
     std::cout << "Staged " << filename << "\n";
 }
+
+void commit(const std::string& message) {
+    if (!fs::exists(".minigit")) {
+        std::cerr << "Error: Not a MiniGit repository.\n";
+        return;
+    }
+
+    //  read the staging area (index)
+    std::map<std::string, std::string> staged_files;
+    std::ifstream index_in(".minigit/index");
+    std::string hash, filename;
+    while (index_in >> hash >> filename) {
+        staged_files[filename] = hash;
+    }
+    index_in.close();
+
+    if (staged_files.empty()) {
+        std::cout << "Nothing to commit, working tree clean.\n";
+        return;
+    }
+
+    //  get the parent commit hash from HEAD
+    std::ifstream head_in(".minigit/HEAD");
+    std::string parent_commit;
+    std::getline(head_in, parent_commit);
+    head_in.close();
+
+    // construct the commit content string
+    std::stringstream commit_content;
+    commit_content << "parent: " << (parent_commit.empty() ? "null" : parent_commit) << "\n";
+    
+    // add a timestamp
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    commit_content << "date: " << std::ctime(&now_time); // ctime adds a newline
+    
+    commit_content << "message: " << message << "\n\n";
+
+    // add the staged files to the commit content
+    for (const auto& pair : staged_files) {
+        commit_content << pair.second << " " << pair.first << "\n";
+    }
+
+    // calculate the hash of the commit content itself
+    SHA1 commit_checksum;
+    commit_checksum.update(commit_content.str());
+    std::string commit_hash = commit_checksum.final();
+
+    // write the commit object to a file named with its hash
+    std::ofstream commit_file(".minigit/commits/" + commit_hash);
+    commit_file << commit_content.str();
+    commit_file.close();
+
+    // update HEAD to point to this new commit
+    std::ofstream head_out(".minigit/HEAD");
+    head_out << commit_hash;
+    head_out.close();
+
+    // clear the index (staging area) since changes are now committed
+    std::ofstream index_clear(".minigit/index", std::ios::trunc);
+    index_clear.close();
+
+    std::cout << "Committed with ID " << commit_hash << "\n";
+}
