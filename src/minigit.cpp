@@ -1,3 +1,6 @@
+#include "sha1.hpp" // for hashing
+#include <sstream>  // for reading file into string
+#include <iomanip>  // for formatting hash output
 #include "minigit.hpp"
 #include <iostream>
 #include <filesystem>
@@ -5,6 +8,22 @@
 
 
 namespace fs = std::filesystem;
+
+std::string file_to_sha1(const std::string& filename) {
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        return ""; // return empty string if file can't be opened
+    }
+    
+    // read the whole file into a stringstream
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+
+    // calculate hash
+    SHA1 checksum;
+    checksum.update(buffer.str());
+    return checksum.final();
+}
 
 void init() {
     // check if a .minigit repository already exists in the current path
