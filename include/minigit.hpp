@@ -7,5 +7,6 @@
 void init();
 void add(const std::string& filename);
 void commit(const std::string& message);
+void log();
 
 #endif // MINIGIT_HPP

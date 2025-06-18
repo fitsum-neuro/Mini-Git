@@ -10,21 +10,25 @@ SDIR = src
 ODIR = obj
 
 # object files
-_OBJ = main.o minigit.o
+_OBJ = main.o minigit.o log.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-# executable name for the target (with .exe for Windows)
-TARGET = minigit.exe
+# executable name for the target
+TARGET = minigit
 
 # default rule: build the target
 all: $(TARGET)
 
 # rule to build the target executable
 $(TARGET): $(OBJ)
-	$(CXX) -o $@ $^ $(CXXFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) -lstdc++fs
 
 # rule to build object files using standard Unix commands
 $(ODIR)/%.o: $(SDIR)/%.cpp
+	mkdir -p $(ODIR)
+	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
+
+$(ODIR)/log.o: src/log.cpp
 	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 

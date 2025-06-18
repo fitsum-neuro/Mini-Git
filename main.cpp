@@ -26,6 +26,8 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         commit(argv[3]);
+    } else if (command == "log") {
+        log();
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;
