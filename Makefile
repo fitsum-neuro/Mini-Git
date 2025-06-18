@@ -10,7 +10,7 @@ SDIR = src
 ODIR = obj
 
 # object files
-_OBJ = main.o minigit.o log.o
+_OBJ = main.o minigit.o log.o branch.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # executable name for the target
@@ -29,6 +29,10 @@ $(ODIR)/%.o: $(SDIR)/%.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 
 $(ODIR)/log.o: src/log.cpp
+	mkdir -p $(ODIR)
+	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
+
+$(ODIR)/branch.o: src/branch.cpp
 	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 

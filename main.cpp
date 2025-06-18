@@ -28,6 +28,18 @@ int main(int argc, char* argv[]) {
         commit(argv[3]);
     } else if (command == "log") {
         log();
+    } else if (command == "branch") {
+        if (argc < 3) {
+            std::cerr << "Usage: minigit branch <branch-name>\n";
+            return 1;
+        }
+        branch(argv[2]);
+    } else if (command == "switch") {
+        if (argc < 3) {
+            std::cerr << "Usage: minigit switch <branch-name>\n";
+            return 1;
+        }
+        switch_branch(argv[2]);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;
