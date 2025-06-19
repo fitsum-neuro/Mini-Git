@@ -10,5 +10,6 @@ void commit(const std::string& message);
 void log();
 void branch(const std::string& name);
 void switch_branch(const std::string& name);
+void checkout(const std::string& name_or_hash);
 
 #endif // MINIGIT_HPP

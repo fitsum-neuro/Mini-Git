@@ -3,10 +3,13 @@ This project is an educational, lightweight version of Git built from scratch in
 
 This system simulates a local-only Git experience through a command-line interface (CLI).
 
-Features Implemented (So far)
-init: Initializes a new, empty MiniGit repository in the current directory.
-add <filename>: Stages file contents for the next commit.
-commit -m "<message>": Records a snapshot of the staged files permanently into the repository's history.
+Features Implemented
+- `init`: Initializes a new, empty MiniGit repository in the current directory.
+- `add <filename>`: Stages file contents for the next commit.
+- `commit -m "<message>"`: Records a snapshot of the staged files permanently into the repository's history.
+- `log`: Views the commit history, showing commit hashes and messages from HEAD backward.
+- `branch <branch-name>`: Creates a new branch pointer to the current commit.
+- `switch <branch-name>`: Switches HEAD to the specified branch.
 
 Prerequisites
 Before you can build and run MiniGit, you must have the following tools installed on your system:
@@ -21,16 +24,46 @@ Navigate to the Project Directory
 Compile the Code
 >>Run the make command. This will read the Makefile and build the executable file.
 
-How to Use MiniGit
+How to Use MiniGit (Linux)
 
- >>create a separate project folder to test it in.
+1. **Initialize a repository:**
+   ```bash
+   ./minigit init
+   ```
+2. **Create and add a file:**
+   ```bash
+   echo "Hello, version control!" > readme.md
+   ./minigit add readme.md
+   ```
+3. **Commit changes:**
+   ```bash
+   ./minigit commit -m "Initial commit"
+   ```
+4. **View commit history:**
+   ```bash
+   ./minigit log
+   ```
+5. **Create a branch:**
+   ```bash
+   ./minigit branch feature1
+   ```
+6. **Switch branches:**
+   ```bash
+   ./minigit switch feature1
+   ```
 
- >> Run the init command. 
-  ..\MiniGit\minigit.exe init (depends on your path)
-  How to Create and Add a file
-  >>echo "Hello, version control!" > readme.md (creates a file)
-  >> ..\MiniGit\minigit.exe add readme.md (stages the file)
-  
-  Commiting change
-  >> ..\Mini-Git\minigit.exe commit -m "LOL"
-  
+---
+
+### Branch Management
+- Branches are stored in `.minigit/refs/<branch-name>` and point to specific commits.
+- The current branch is tracked in `.minigit/CURRENT_BRANCH`.
+- When you switch branches, HEAD is updated to the commit pointed to by the branch.
+
+### Viewing Commit History
+- The `log` command traverses from the current HEAD backward, showing each commit's hash, date, and message.
+
+---
+
+**Note:**
+- All commands are run from the project root directory.
+- This project is for educational use and does not implement all safety checks or features of full Git.
