@@ -17,7 +17,7 @@ Before you can build and run MiniGit, you must have the following tools installe
 >>GNU Make: The make utility is used to build the project from the source code.
 
 To compile the project
->> git clone https://github.com/your-username/your-repository-name.git
+>> git clone https://github.com/fitsum-neuro/Mini-Git.git
 
 Navigate to the Project Directory
 

@@ -46,6 +46,12 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         checkout(argv[2]);
+    } else if (command == "merge") {
+        if (argc < 3) {
+            std::cerr << "Usage: minigit merge <branch-name>\n";
+            return 1;
+        }
+        merge(argv[2]);
     } else {
         std::cerr << "Unknown command: " << command << "\n";
         return 1;

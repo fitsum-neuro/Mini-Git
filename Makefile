@@ -10,7 +10,7 @@ SDIR = src
 ODIR = obj
 
 # object files
-_OBJ = main.o minigit.o log.o branch.o checkout.o
+_OBJ = main.o minigit.o log.o branch.o checkout.o merge.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # executable name for the target
@@ -37,6 +37,10 @@ $(ODIR)/branch.o: src/branch.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 
 $(ODIR)/checkout.o: src/checkout.cpp
+	mkdir -p $(ODIR)
+	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
+
+$(ODIR)/merge.o: src/merge.cpp
 	mkdir -p $(ODIR)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -I$(IDIR)
 
