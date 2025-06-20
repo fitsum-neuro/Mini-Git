@@ -1,7 +1,7 @@
 # compiler to use
 CXX = g++
 
-# compiler flags
+# compiler flags-
 CXXFLAGS = -std=c++17 -Wall -g
 
 # directories
