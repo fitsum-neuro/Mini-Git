@@ -25,8 +25,9 @@ Navigate to the Project Directory
 Compile the Code
 >>Run the make command. This will read the Makefile and build the executable file.
 
-How to Use MiniGit (Linux)
 For window (..\your-path\minigit.exe <feature eg : init>)
+How to Use MiniGit (Linux)
+
 1. **Initialize a repository:**
    ```bash
    ./minigit init
@@ -55,6 +56,8 @@ For window (..\your-path\minigit.exe <feature eg : init>)
 7. **Diff Viewer:**
   ```bash
   ./minigit diff <commit1> <commit2>
+  ```
+
 ---
 
 ### Branch Management
