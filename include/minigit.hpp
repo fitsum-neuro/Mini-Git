@@ -7,5 +7,10 @@
 void init();
 void add(const std::string& filename);
 void commit(const std::string& message);
+void log();
+void branch(const std::string& name);
+void switch_branch(const std::string& name);
+void checkout(const std::string& name_or_hash);
+void merge(const std::string& branch_name);
 
 #endif // MINIGIT_HPP
