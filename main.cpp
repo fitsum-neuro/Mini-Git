@@ -1,4 +1,3 @@
-
 #include "minigit.hpp"
 #include <iostream>
 #include <string>
@@ -29,6 +28,12 @@ int main(int argc, char* argv[]) {
         commit(argv[3]);
     } else if (command == "log") {
         log();
+    } else if (command == "diff") { // <--- THIS IS THE NEW BLOCK
+        if (argc < 4) {
+            std::cerr << "Usage: minigit diff <commit1> <commit2>\n";
+            return 1;
+        }
+        diff(argv[2], argv[3]);
     } else if (command == "branch") {
         if (argc < 3) {
             std::cerr << "Usage: minigit branch <branch-name>\n";

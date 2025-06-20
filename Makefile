@@ -11,6 +11,7 @@ ODIR = obj
 
 # object files
 _OBJ = main.o minigit.o log.o branch.o checkout.o merge.o
+
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # executable name for the target
@@ -21,7 +22,7 @@ all: $(TARGET)
 
 # rule to build the target executable
 $(TARGET): $(OBJ)
-	$(CXX) -o $@ $^ $(CXXFLAGS) -lstdc++fs
+	$(CXX) -o $@ $^ $(CXXFLAGS) # -lstdc++fs
 
 # rule to build object files using standard Unix commands
 $(ODIR)/%.o: $(SDIR)/%.cpp
