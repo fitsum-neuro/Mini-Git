@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
     if (argc < 2) {
         std::cerr << "Usage: minigit <command> [args]\n";
         return 1;
