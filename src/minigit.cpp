@@ -8,7 +8,7 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-
+#include <vector> 
 
 namespace fs = std::filesystem;
 
@@ -146,4 +146,126 @@ void commit(const std::string& message) {
     index_clear.close();
 
     std::cout << "Committed with ID " << commit_hash << "\n";
+}
+
+// helper function to load the contents of a commit into a map
+// the map will store: <filename, content_hash>
+std::map<std::string, std::string> load_commit_data(const std::string& commit_hash) {
+    std::map<std::string, std::string> commit_data;
+    fs::path commit_path = fs::path(".minigit/commits") / commit_hash;
+
+    if (!fs::exists(commit_path)) {
+        return commit_data; // return empty map if commit not found
+    }
+
+    std::ifstream commit_file(commit_path);
+    std::string line;
+    bool content_started = false;
+
+    while (std::getline(commit_file, line)) {
+        if (line.empty()) {
+            content_started = true; // the file content listing starts after the first blank line
+            continue;
+        }
+        if (content_started) {
+            std::stringstream ss(line);
+            std::string content_hash, filename;
+            ss >> content_hash >> filename;
+            if (!content_hash.empty() && !filename.empty()) {
+                commit_data[filename] = content_hash;
+            }
+        }
+    }
+    return commit_data;
+}
+
+// helper function to read a blob object into a vector of strings
+std::vector<std::string> read_blob_lines(const std::string& content_hash) {
+    std::vector<std::string> lines;
+    fs::path blob_path = fs::path(".minigit/objects") / content_hash;
+
+    if (!fs::exists(blob_path)) {
+        return lines; // return empty vector if blob not found
+    }
+
+    std::ifstream blob_file(blob_path);
+    std::string line;
+    while (std::getline(blob_file, line)) {
+        lines.push_back(line);
+    }
+    return lines;
+}
+
+
+void diff(const std::string& commit_hash1, const std::string& commit_hash2) {
+    if (!fs::exists(".minigit")) {
+        std::cerr << "Error: Not a MiniGit repository.\n";
+        return;
+    }
+
+    // 1 loads the data for both commits
+    std::map<std::string, std::string> commit1_data = load_commit_data(commit_hash1);
+    std::map<std::string, std::string> commit2_data = load_commit_data(commit_hash2);
+
+    if (commit1_data.empty()) {
+        std::cerr << "Error: Could not find commit " << commit_hash1 << "\n";
+        return;
+    }
+    if (commit2_data.empty()) {
+        std::cerr << "Error: Could not find commit " << commit_hash2 << "\n";
+        return;
+    }
+
+    // 2 compares the file lists
+    for (const auto& pair2 : commit2_data) {
+        const std::string& filename = pair2.first;
+        const std::string& hash2 = pair2.second;
+
+        auto it1 = commit1_data.find(filename);
+
+        if (it1 == commit1_data.end()) {
+            // file exists in commit2 but not in commit1
+            std::cout << "--- /dev/null\n";
+            std::cout << "+++ " << filename << "\n";
+            std::vector<std::string> lines = read_blob_lines(hash2);
+            for (const auto& line : lines) {
+                std::cout << "+ " << line << "\n";
+            }
+            std::cout << "\n";
+        } else {
+            // file exists in both commits, check if modified
+            const std::string& hash1 = it1->second;
+            if (hash1 != hash2) {
+                // hashes are different 
+                std::cout << "--- " << filename << "\n";
+                std::cout << "+++ " << filename << "\n";
+                std::vector<std::string> lines1 = read_blob_lines(hash1);
+                std::vector<std::string> lines2 = read_blob_lines(hash2);
+
+                // simple diff: show all old lines with '-', all new lines with '+'
+                for (const auto& line : lines1) {
+                    std::cout << "- " << line << "\n";
+                }
+                for (const auto& line : lines2) {
+                    std::cout << "+ " << line << "\n";
+                }
+                std::cout << "\n";
+            }
+            // erase from commit1_data so we can find deleted files later
+            commit1_data.erase(it1);
+        }
+    }
+
+    // 3 any files left in commit1_data were deleted in commit2
+    for (const auto& pair1 : commit1_data) {
+        const std::string& filename = pair1.first;
+        const std::string& hash1 = pair1.second;
+        std::cout << "--- " << filename << "\n";
+        std::cout << "+++ /dev/null\n";
+        std::vector<std::string> lines = read_blob_lines(hash1);
+        for (const auto& line : lines) {
+            std::cout << "- " << line << "\n";
+        }
+        std::cout << "\n";
+    }
 }
