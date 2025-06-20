@@ -10,6 +10,7 @@ Features Implemented
 - `log`: Views the commit history, showing commit hashes and messages from HEAD backward.
 - `branch <branch-name>`: Creates a new branch pointer to the current commit.
 - `switch <branch-name>`: Switches HEAD to the specified branch.
+- `diff`: Implement diff <commit1> <commit2> to show line-by-line differences.
 
 Prerequisites
 Before you can build and run MiniGit, you must have the following tools installed on your system:
@@ -25,7 +26,7 @@ Compile the Code
 >>Run the make command. This will read the Makefile and build the executable file.
 
 How to Use MiniGit (Linux)
-
+For window (..\your-path\minigit.exe <feature eg : init>)
 1. **Initialize a repository:**
    ```bash
    ./minigit init
@@ -51,7 +52,9 @@ How to Use MiniGit (Linux)
    ```bash
    ./minigit switch feature1
    ```
-
+7. **Diff Viewer:**
+  ```bash
+  ./minigit diff <commit1> <commit2>
 ---
 
 ### Branch Management
