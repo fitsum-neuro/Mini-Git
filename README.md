@@ -70,6 +70,3 @@ How to Use MiniGit (Linux)
 
 ---
 
-**Note:**
-- All commands are run from the project root directory.
-- This project is for educational use and does not implement all safety checks or features of full Git.
